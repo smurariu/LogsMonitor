@@ -1,0 +1,36 @@
+<!-- index.html -->
+<html ng-app="myApp">
+  <head>
+    <!-- Include 3rd party libraries -->
+    <script src="bower_components/d3/d3.js" charset="UTF-8"></script>
+    <script src="bower_components/angular/angular.js" charset="UTF-8"></script>
+
+    <!-- Include Socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Include the application files -->
+    <script src="src/app.js"></script>
+    <link href="src/app.css" rel="stylesheet">
+
+    <!-- Include Bootstrap -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Include the files of the chart component -->
+    <script src="src/chart.js"></script>
+    <link href="src/chart.css" rel="stylesheet">
+
+  </head>
+  <body ng-controller="MainCtrl">
+
+    <div class="container">
+
+      <nav class="navbar navbar-default">
+        <!-- header goes here -->
+      </nav>
+
+      <div class="row">
+        <!-- visualization goes here -->
+      </div>
+    </div>
+  </body>
+</html>

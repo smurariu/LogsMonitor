@@ -1,0 +1,25 @@
+{
+  "name": "webserver-monitor",
+  "description": "Webserver Monitoring Application",
+  "main": "",
+  "authors": [
+    "Serban Murariu <Serban.Murariu@sundiogroup.com>"
+  ],
+  "license": "MIT",
+  "moduleType": [
+    "node"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6",
+    "d3": "~3.5.17",
+    "angular": "~1.5.6"
+  }
+}
