@@ -1,5 +1,5 @@
 /* src/app.js */
-angular.module('myApp', ['myChart'])
+angular.module('myApp', ["ngSanitize"])
 // Socket.IO Wrapper
 .factory('socket', ["$rootScope",
   function($rootScope) {
@@ -26,12 +26,37 @@ angular.module('myApp', ['myChart'])
     };
   }
 ])
+.directive('scrollToTop', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, elm, attr) {
+      scope.$watch(attr.scrollToTop, function(newValue) {
+          elm[0].scrollTop = 9007199254740992;
+      });
+    }
+  };
+})
+.filter('newlines', function () {
+    return function(text) {
+      if(text.length > 0)
+        return text.replace(/\n/g, '<br/>');
+      else
+        return text;
+    }
+})
 .controller('MainCtrl', ["$scope", "socket",
   function ($scope, socket) {
+    
+    $scope.time = 
+    { 
+      startDateTime: new Date(),
+      endDateTime: new Date(),
+      currentDateTime: new Date()
+    }
 $scope.logs = [
 {
   name: 'PreactActiefBackend.info',
-  path: 'D:\Development\PreAct\myPreact\myPreactService.ConsoleHost\bin\Logs\myPreactCore_info.log',
+  path: 'D:\\Development\\PreAct\\myPreact\\myPreactService.ConsoleHost\\bin\\Logs\\myPreactCore_info.log',
   parser: {
     line: "\n",
     word: /[-"]/gi,
@@ -47,7 +72,7 @@ $scope.logs = [
 },
 {
   name: 'PreactActiefBackend.error',
-  path: 'D:\Development\PreAct\myPreact\myPreactService.ConsoleHost\bin\Logs\myPreactCore_error.log',
+  path: 'D:\\Development\\PreAct\\myPreact\\myPreactService.ConsoleHost\\bin\\Logs\\myPreactCore_error.log',
   parser: {
     line: /# Time:/,
     word: /\n/gi,
@@ -70,34 +95,37 @@ $scope.logs = [
       });
 
       socket.on(log.name, function(data){
-        console.log("Received: " + data);
-
+         //console.log("Received: " + data);
+        
         // The data log as string
         var responseDataStr = data;
+        log.data = data;
 
-        // 1:
-        // Parse string to an array of datum arrays
-        var parsed = StringParser(responseDataStr, log.parser.line, log.parser.word, log.parser.rem);
+        //scroll the divs
 
-        // 2:
-        // Map each datum array to object
-        var mapped = parsed.map(log.map);
+        // // 1:
+        // // Parse string to an array of datum arrays
+        // var parsed = StringParser(responseDataStr, log.parser.line, log.parser.word, log.parser.rem);
 
-        // 3:
-        // Filter the data
-        var filtered = mapped.filter(function(d){
-            return !isNaN(d.time);
-        });
+        // // 2:
+        // // Map each datum array to object
+        // var mapped = parsed.map(log.map);
 
-        // 4:
-        // Group the dataset by time
-        var grouped = Classifier(filtered, function(d) {
-            var coeff = 1000 * 60 * $scope.groupByMinutes;
-            return Math.round(d.time / coeff) * coeff;
-        });
+        // // 3:
+        // // Filter the data
+        // var filtered = mapped.filter(function(d){
+        //     return !isNaN(d.time);
+        // });
 
-        // Use the grouped data for the chart
-        log.data = grouped;
+        // // 4:
+        // // Group the dataset by time
+        // var grouped = Classifier(filtered, function(d) {
+        //     var coeff = 1000 * 60 * $scope.groupByMinutes;
+        //     return Math.round(d.time / coeff) * coeff;
+        // });
+
+        // // Use the grouped data for the chart
+        // log.data = grouped;
       });
     });
   }

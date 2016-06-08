@@ -4,6 +4,7 @@
     <!-- Include 3rd party libraries -->
     <script src="bower_components/d3/d3.js" charset="UTF-8"></script>
     <script src="bower_components/angular/angular.js" charset="UTF-8"></script>
+    <script src="/bower_components/angular-sanitize/angular-sanitize.js" charset="UTF-8"></script>
 
     <!-- Include Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
@@ -23,13 +24,23 @@
   <body ng-controller="MainCtrl">
 
     <div class="container">
-
       <nav class="navbar navbar-default">
-        <!-- header goes here -->
+        <div class="navbar-text">
+          <span>Date/Time Filter:</span>
+          <span>{{ time.startDateTime | date : 'dd.MM.yyyy HH:mm' }}</span> -
+          <span>{{ time.endDateTime | date : 'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+        <div class="navbar-text">
+          <i>Current Date/Time: {{ time.currentDateTime | date : 'dd.MM.yyyy HH:mm' }}</i>
+        </div>
       </nav>
 
-      <div class="row">
-        <!-- visualization goes here -->
+      <div class="row" ng-repeat="log in logs">
+        <div class="col-lg-12">
+        <h3>{{ log.name }}</h3> 
+        <div scroll-to-top="log.data" ng-bind-html="log.data | newlines" style="overflow: scroll; max-height:500px;" class="scrollMe"></div>
+        <bar-chart class="chart blue" data="log.data" start-date="time.startDateTime" end-date="time.endDateTime" cur-date="time.currentDateTime">
+        </bar-chart>
       </div>
     </div>
   </body>

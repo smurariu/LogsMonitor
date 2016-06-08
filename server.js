@@ -1,5 +1,6 @@
 /* server.js */
 var fs = require('fs');
+var tail = require('tail').Tail;
 var app = require('express')();
 var http = require('http').Server(app);
 var serveStatic = require('serve-static');
@@ -15,10 +16,11 @@ io.on('connection', function(socket){
  
 // Send the content of a file to the client
   var sendFile = function(name, path) {
-    // Read the file
-    fs.readFile(path, 'utf8', function (err, data) {
-      // Emit the content of the file
-      io.emit(name, data);
+
+      // Read the file
+      fs.readFile(path, 'utf8', function (err, data) {
+        // Emit the content of the file
+        io.emit(name, data);
     });
   };
   
@@ -31,7 +33,7 @@ io.on('connection', function(socket){
        sendFile(obj.name, obj.path);
 
        // Watch the file for changes
-       fs.watchFile(obj.path, function (curr, prev) {
+       fs.watchFile(obj.path, { persistent: true, interval: 500 }, function (curr, prev) {
 
         sendFile(obj.name, obj.path);
       });
