@@ -13,7 +13,8 @@ app.use(serveStatic('.', {'index': ['index.html']}));
 io.on('connection', function(socket){
  
  var watchers = [];
- 
+ var senders = [];
+
 // Send the content of a file to the client
   var sendFile = function(name, path) {
 
@@ -29,14 +30,14 @@ io.on('connection', function(socket){
      if (!watchers.hasOwnProperty(obj.name)){
 
        console.log("Watching " + obj.name);
-       watchers[obj.name] = obj;
-       sendFile(obj.name, obj.path);
+       var options= {lineSeparator: /[\r]{0,1}\n/, fromBeginning: false, watchOptions: {interval: 500}, follow: true}
 
-       // Watch the file for changes
-       fs.watchFile(obj.path, { persistent: true, interval: 500 }, function (curr, prev) {
+       watchers[obj.name] = new tail(obj.path, options);
+       senders[obj.name] = function(data){
+         io.emit(obj.name, data);
+        };
 
-        sendFile(obj.name, obj.path);
-      });
+       watchers[obj.name].on("line", senders[obj.name]);
     }
   });
   

@@ -6,6 +6,7 @@
     "express": "*",
     "fs": "0.0.2",
     "serve-static": "*",
-    "socket.io": "^1.4.6"
+    "socket.io": "^1.4.6",
+    "tail": "^1.1.0"
   }
 }
